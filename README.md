@@ -33,6 +33,7 @@ Podemos observar las imágenes que se están utilizando para entrenamiento:
 
 Podemos observar las imágenes que se están utilizando para testeo:
 
+
 ![Descripción de la imagen](/img/Testing_img.png "Face Spoofing Detection")
 
 ### Entrenamiento
@@ -143,30 +144,79 @@ with open("antispoofing_models/antispoofing_model.json", "w") as json_file:
 
 ### Training vs Validation Accuracy
 
-![Descripción de la imagen](/img/trainingvsvalidation.png "Face Spoofing Detection")
+<img src="img/trainingvsvalidation.png"  width="400" height="300">
 
 ### Training and Validation Loss
 
-![Descripción de la imagen](/img/trainingandvalidationLoss.png "Face Spoofing Detection")
+<img src="img/trainingandvalidationLoss.png"  width="400" height="300">
 
 ## Pasos de ejecución de Docker
 
+Para la ejecución de la imagen utilizamos el archivo Makefile que contiene los comandos necesarios para realizar Build y Run al script check_faces.py.
 
-![Descripción de la imagen](/img/prueba.png "Face Spoofing Detection")
+<details>
+<summary>
+Dockerfile
+</summary>
 
-### Desarrollo
+```Dockerfile
+FROM tensorflow/tensorflow:2.11.0-jupyter
 
-En el proyecto se ha utilizado un modelo de Deep Learning para la detección de rostros reales o no. Para ejecutar el proyecto no necesitar entrenar el modelo nuevamente. Los pesos del modelo se encuentra en **antispoofing_models/antispoofing_model.h5**. Por lo que, solo requiere ejecutar el archivo **app.py**. Y descomentar las siguientes líneas de código:
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-```sh
-# video.open("http://192.168.1.101:8080/video")
-# vs = VideoStream(src=0).start()
-# time.sleep(2.0)
+ENV APP_HOME=/home/app/
+
+RUN apt-get update && \
+    apt-get install -y ffmpeg libsm6 libxext6 && \ 
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    
+RUN pip install --no-cache-dir opencv-python==4.6.0.66 tqdm==4.66.1
+
+WORKDIR ${APP_HOME}
+```
+</details>
+
+Build Image
+```Makefile
+make build_image
+```
+Run Image
+```Makefile
+make run
+```
+Run check_faces.py
+```Makefile
+make run_script
 ```
 
-## Installation
+## Makefile
+El archivo contiene los comandos necesarios para inicializar la imagen y utilizar la aplicación anti-spoofing.
 
-```sh
-opencv-python==4.6.0.66
-tensorflow==2.11.0
+```Makefile
+#!/bin/bash
+IMAGE=proyectofinal_cc
+TAG=v0.1
+CONTAINER_NAME=proyectofinal_cc_
+
+SOURCE=$(PWD)
+TARGET=/home/app/
+WORK_DIR=$(TARGET)
+
+ARGS=-it --rm -v $(SOURCE):$(TARGET) -w $(WORK_DIR) -p 8888:8888 $(IMAGE):$(TAG)
+
+run:
+	docker run $(ARGS) bash
+
+build_image:
+	docker build -t $(IMAGE):$(TAG) .
+
+run_script:
+	docker run $(ARGS) python3 check_faces.py
 ```
+
+
+
+
+
