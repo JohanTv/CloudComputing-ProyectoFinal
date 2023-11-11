@@ -1,19 +1,25 @@
-#!/bin/bash
-IMAGE=proyectofinal_cc
+IMAGE_NAME=proyectofinal_cc
 TAG=v0.1
-CONTAINER_NAME=proyectofinal_cc_
+IMAGE=$(IMAGE_NAME):$(TAG)
 
 SOURCE=$(PWD)
 TARGET=/home/app/
 WORK_DIR=$(TARGET)
 
-ARGS=-it --rm -v $(SOURCE):$(TARGET) -w $(WORK_DIR) -p 8888:8888 $(IMAGE):$(TAG)
+PORT=8888
+OPTIONS=-it --rm -v $(SOURCE):$(TARGET) -w $(WORK_DIR)
 
 run:
-	docker run $(ARGS) bash
+	docker run $(OPTIONS) -p $(PORT):$(PORT) $(IMAGE) bash
 
 build_image:
-	docker build -t $(IMAGE):$(TAG) .
+	docker build -t $(IMAGE) .
+
+remove_image:
+	docker rmi $(IMAGE)
 
 run_script:
-	docker run $(ARGS) python3 check_faces.py
+	docker run $(OPTIONS) $(IMAGE) python3 check_faces.py
+
+run_jupyter:
+	docker run $(OPTIONS) -p $(PORT):$(PORT) $(IMAGE) jupyter notebook --notebook-dir=notebooks/ --ip 0.0.0.0 --port $(PORT) --no-browser --allow-root
