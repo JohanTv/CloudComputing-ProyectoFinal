@@ -2,7 +2,7 @@ IMAGE_NAME=proyectofinal_cc
 TAG=v0.1
 IMAGE=$(IMAGE_NAME):$(TAG)
 
-SOURCE=$(PWD)
+SOURCE="$(PWD)"
 TARGET=/home/app/
 WORK_DIR=$(TARGET)
 
