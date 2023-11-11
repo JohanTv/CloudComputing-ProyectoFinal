@@ -23,8 +23,8 @@ El conjunto de imágenes se encuentra divido de la siguiente manera:
 * Dataset de Entrenamiento (4220 imágenes)
     * 2102 imágenes son reales
     * 2118 imágenes son spoofing
-* Dataset de Testo
-    * 477 imágenes son reales (951 imágenes)
+* Dataset de Testo (951 imágenes)
+    * 477 imágenes son reales 
     * 474 imágenes son spoofing
 
 Podemos observar las imágenes que se están utilizando para entrenamiento:
@@ -154,29 +154,7 @@ with open("antispoofing_models/antispoofing_model.json", "w") as json_file:
 
 Para la ejecución de la imagen utilizamos el archivo Makefile que contiene los comandos necesarios para realizar Build y Run al script check_faces.py.
 
-<details>
-<summary>
-Dockerfile
-</summary>
-
-```Dockerfile
-FROM tensorflow/tensorflow:2.11.0-jupyter
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-ENV APP_HOME=/home/app/
-
-RUN apt-get update && \
-    apt-get install -y ffmpeg libsm6 libxext6 && \ 
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    
-RUN pip install --no-cache-dir opencv-python==4.6.0.66 tqdm==4.66.1
-
-WORKDIR ${APP_HOME}
-```
-</details>
+[Dockerfile](https://github.com/JohanTv/CloudComputing-ProyectoFinal/blob/main/Dockerfile)
 
 Build Image
 ```Makefile
@@ -190,33 +168,23 @@ Run check_faces.py
 ```Makefile
 make run_script
 ```
-
-## Makefile
-El archivo contiene los comandos necesarios para inicializar la imagen y utilizar la aplicación anti-spoofing.
-
+Run notebooks
 ```Makefile
-#!/bin/bash
-IMAGE=proyectofinal_cc
-TAG=v0.1
-CONTAINER_NAME=proyectofinal_cc_
-
-SOURCE=$(PWD)
-TARGET=/home/app/
-WORK_DIR=$(TARGET)
-
-ARGS=-it --rm -v $(SOURCE):$(TARGET) -w $(WORK_DIR) -p 8888:8888 $(IMAGE):$(TAG)
-
-run:
-	docker run $(ARGS) bash
-
-build_image:
-	docker build -t $(IMAGE):$(TAG) .
-
-run_script:
-	docker run $(ARGS) python3 check_faces.py
+make run_jupyter
+```
+Remove Image
+```Makefile
+make remove_image
+```
+## Monitoreo con cAdvisor
+Para ejecutar el cAdvisor y observar los recursos utilizados es necesario usar el siguiente comando:
+```Makefile
+make run_cadvisor
 ```
 
 
+## Makefile
+El archivo contiene los comandos necesarios para construir, ejecutar y remover la imagen, y usar los notebooks del modelo.
 
-
+[Makefile](https://github.com/JohanTv/CloudComputing-ProyectoFinal/blob/main/Makefile)
 

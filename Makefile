@@ -23,3 +23,6 @@ run_script:
 
 run_jupyter:
 	docker run $(OPTIONS) -p $(PORT):$(PORT) $(IMAGE) jupyter notebook --notebook-dir=notebooks/ --ip 0.0.0.0 --port $(PORT) --no-browser --allow-root
+	
+run_cadvisor:
+	docker run -d --rm --volume=/:/roots:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker:/var/lib/docker:ro -p 8080:8080 --privileged=true --name cadvisor gcr.io/cadvisor/cadvisor
