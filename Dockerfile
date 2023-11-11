@@ -10,6 +10,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-RUN pip install --no-cache-dir opencv-python==4.6.0.66 tqdm==4.66.1
+RUN pip install --no-cache-dir opencv-python==4.6.0.66 tqdm==4.66.1 scipy==1.10.1
 
 WORKDIR ${APP_HOME}
