@@ -1,6 +1,7 @@
-IMAGE_NAME=proyectofinal_cc
-TAG=v0.1
+IMAGE_NAME=spoofing
+TAG=v1.0
 IMAGE=$(IMAGE_NAME):$(TAG)
+IMAGE_LAMBDA=$(IMAGE_NAME)_lambda:$(TAG)
 
 SOURCE="$(PWD)"
 TARGET=/home/app/
@@ -26,3 +27,9 @@ run_jupyter:
 	
 run_cadvisor:
 	docker run -d --rm --volume=/:/roots:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker:/var/lib/docker:ro -p 8080:8080 --privileged=true --name cadvisor gcr.io/cadvisor/cadvisor
+
+build_lambda_image:
+	docker build -t $(IMAGE_LAMBDA) -f lambda/Dockerfile .
+
+remove_lambda_image:
+	docker rmi $(IMAGE_LAMBDA)
