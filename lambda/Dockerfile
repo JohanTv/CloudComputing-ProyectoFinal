@@ -30,7 +30,7 @@ COPY lambda/requirements.txt ./
 
 # Install the python requirements from requirements.txt
 # RUN apt-get install ffmpeg libsm6 libxext6  -y
-RUN python3.8 -m pip install -r lambda/requirements.txt
+RUN python3.8 -m pip install -r requirements.txt
 
 # Copy the earlier created app.py file to the container
 COPY lambda/app.py ./
