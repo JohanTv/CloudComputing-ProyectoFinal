@@ -231,8 +231,10 @@ Una vez obtenida el string en base64, realizar lo siguiente:
 - Copiar el End-point en Postman
 - Copiar la conversión de la imagen .jpg a string base64 en la viñeta Body, seleccionar Raw (Text)
 
+### Testeo Postman
 <img src="img/Postman.png"  width="700" height="400">
 
- 
+### Testeo AWS
+ <img src="img/aws_Testeo.png"  width="700" height="400">
 
 
