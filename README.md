@@ -188,3 +188,51 @@ El archivo contiene los comandos necesarios para construir, ejecutar y remover l
 
 [Makefile](https://github.com/JohanTv/CloudComputing-ProyectoFinal/blob/main/Makefile)
 
+# Arquitectura
+
+<img src="img/Arquitectura.png"  width="600" height="300">
+
+# AWS ECR
+
+Comandos para subir la imagen container a AWS:
+
+```Makefile
+docker build -t -------------.dkr.ecr.us-east-1.amazonaws.com/spoofing:latest -f lambda/Dockerfile .
+docker push -------------.dkr.ecr.us-east-1.amazonaws.com/spoofing:latest
+```
+# AWS Lambda
+
+Pantalla de configuración para utilizar la imagen:
+
+<img src="img/AWS_Lambda_config.png"  width="600" height="300">
+
+Es importante una vez creado el lambda, configurarlo con la siguientes medidas:
+
+- TimeOut: 1 min
+- Memory: 1024 mb
+
+Es importante mencionar que tras realizar prueba, el tiempo promedio de ejecución es de 10 seg y la cantidad de memoria promedio es de 480 ~ 530 mb.
+
+<img src="img/API_gateway.png"  width="600" height="300">
+
+# Testeo
+Para probar el desarrollo en Postman. Es necesario que el input, una imagen .jpg, se transforme a base64. Para ello, puede usar la siguiente página web:
+```Makefile
+https://www.base64-image.de/
+```
+
+End Point
+```Makefile
+https://c4ccmbyl2nqfeuz3zmsreibubq0toqsx.lambda-url.us-east-1.on.aws/
+```
+
+Una vez obtenida el string en base64, realizar lo siguiente:
+- Usar el método GET
+- Copiar el End-point en Postman
+- Copiar la conversión de la imagen .jpg a string base64 en la viñeta Body, seleccionar Raw (Text)
+
+<img src="img/Postman.png"  width="700" height="400">
+
+ 
+
+
